@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Catch Cubes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url(./assets/bg-In-Game.png);
+            background-size: cover;
+            padding-top: 100px;
+        }
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 400px;
+            padding: 20px;
+            margin: 0 auto;
+            border: 1px solid #000;
+            overflow: hidden;
+            background-image: url(./assets/bg-falling-box.png);
+            background-size: cover;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 120px;
+        }
+        .falling-box {
+            position: absolute;
+            display: inline-flex;
+            flex-wrap: wrap;
+            padding: 8px;
+            border-radius: 8px;
+            background-color: navy;
+            color: cyan;
+            border: 1px solid #000;
+            text-align: center;
+            line-height: 40px;
+            font-size: 15px;
+        }
+        #answer-box {
+            display: inline-block;
+            width: 100px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+        }
+        #clear-answer-button {
+            display: inline-block;
+            vertical-align: top;
+        }
+        #notification {
+            margin: 20px auto;
+        }
+        #score {
+            margin-top: 5px;
+            font-weight: bold;
+            padding-bottom: 20px;
+            color: aliceblue;
+        }
+        #checkAnswerButton {
+            padding: 10px;
+            border-radius: 8px;
+            color: aliceblue;
+            background-color: #000;
+            margin-top: 20px;
+            transition: all .3s;
+            font-weight: bold;
+        }
+        #checkAnswerButton:hover {
+            background-color: navy;
+            color: cyan;
+        }
+        #box-falling {
+            width: 400px;
+            height: 400px;
+            display: flex;
+            flex-wrap: wrap;
+            padding-right: 35px;
+        }
+        #box-question {
+            max-height: 320px;
+            width: 200px;
+            color: aliceblue;
+            padding-left: 40px;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            text-align: center;
+            /* justify-content: space-between; */
+        }
+        #box-question p {
+            display: flex;
+            text-align: center;
+        }
+        #answer-box span {
+            padding-left: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- <h1>Catch Cubes</h1> -->
+    
+    
+    <div id="score">Score: <span id="correctAnswers">0</span></span></div>
+
+    <div id="game-container">
+        <div id="box-question">
+            <p>Apa itu EER?</p>
+            <div id="answer-box">
+                <span id="answer"></span>
+            <!-- <button id="clearAnswerButton">Hapus</button> -->
+            </div>
+            
+            <button id="checkAnswerButton">Periksa Jawaban</button>
+            <div id="notification"></div>
+        </div>
+        <div id="box-falling"></div>
+        
+            
+        </div>       
+    </div>
+    
+   
+   
+
+    <!-- Tambahkan tombol "Periksa Jawaban" -->
+    
+
+    <script>
+        const questions = [
+            { question: "Apa itu EER?", answer: "Model" },
+            { question: "Apa tujuan EER?", answer: "Pengembangan" },
+            { question: "Apa yang ditingkatkan dalam EER dibandingkan dengan ER?", answer: "Ketepatan" },
+            { question: "Apa arti 'Entity' dalam EER?", answer: "Objek" },
+            { question: "Apa yang dimaksud dengan 'Enhanced' dalam EER?", answer: "Ditingkatkan" },
+            { question: "Apa yang ditambahkan dalam EER?", answer: "Atribut" },
+            { question: "Apa istilah yang digunakan untuk hubungan antar entitas dalam EER?", answer: "Hubungan" },
+            { question: "Apa peran 'Subclass' dalam EER?", answer: "Spesialisasi" },
+            { question: "Apa yang dimaksud dengan 'Aggregation' dalam EER?", answer: "Komposisi" },
+            { question: "Apa yang dimaksud dengan 'Generalization' dalam EER?", answer: "Abstraksi" }
+            // Tambahkan pertanyaan dan jawaban di sini
+        ];
+
+        const gameContainer = document.getElementById("box-falling");
+        const answerBox = document.getElementById("answer");
+        const clearAnswerButton = document.getElementById("clearAnswerButton");
+        const notification = document.getElementById("notification");
+        const correctAnswersElement = document.getElementById("correctAnswers");
+        const wrongAnswersElement = document.getElementById("wrongAnswers");
+
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+
+        function createFallingBox() {
+            const fallingBox = document.createElement("div");
+            fallingBox.className = "falling-box";
+            fallingBox.style.right = Math.random() * (gameContainer.offsetWidth - 50) + "px";
+
+            // Pilih secara acak salah satu objek pertanyaan
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            fallingBox.textContent = questions[randomIndex].answer;
+            
+            gameContainer.appendChild(fallingBox);
+
+            const speed = Math.random() * (3 - 1) + 5; // Kecepatan jatuh acak
+
+            const fallInterval = setInterval(() => {
+                const topPosition = fallingBox.offsetTop;
+                if (topPosition >= gameContainer.offsetHeight - 70) {
+                    gameContainer.removeChild(fallingBox);
+                    clearInterval(fallInterval);
+                    // Tandai jawaban sebagai salah jika kotak jatuh
+                    markAnswer(false);
+                } else {
+                    fallingBox.style.top = topPosition + speed + "px";
+                }
+            }, 50);
+
+            fallingBox.addEventListener("click", () => {
+                const boxText = fallingBox.textContent;
+                answerBox.textContent += boxText;
+                gameContainer.removeChild(fallingBox);
+                clearInterval(fallInterval);
+            });
+        }
+
+        function getRandomLetter() {
+            const alphabet = "QWERTYUIOPASDFGHJKLZXCVBNM";
+            return alphabet[Math.floor(Math.random() * alphabet.length)];
+        }
+
+        setInterval(createFallingBox, 1000);
+
+        // Tambahkan event listener untuk tombol "Periksa Jawaban"
+        const checkAnswerButton = document.getElementById("checkAnswerButton");
+        checkAnswerButton.addEventListener("click", checkAnswer);
+
+        function checkAnswer() {
+            const userAnswer = answerBox.textContent.toUpperCase();
+            const correctAnswer = questions[0].answer.toUpperCase(); // Mengambil jawaban pertama dari pertanyaan
+            if (userAnswer === correctAnswer) {
+                notification.textContent = 'Jawaban Anda benar!';
+                markAnswer(true);
+            } else {
+                notification.textContent = 'Jawaban Anda salah';
+                markAnswer(false);
+            }
+            
+            // Setelah memeriksa jawaban, hapus isi kotak jawaban
+            answerBox.textContent = '';
+            // Munculkan pertanyaan baru
+            nextQuestion();
+        }
+
+        // Tambahkan event listener untuk tombol "Hapus"
+        clearAnswerButton.addEventListener("click", clearAnswer);
+
+        function clearAnswer() {
+            answerBox.textContent = '';
+        }
+
+        function markAnswer(isCorrect) {
+            if (isCorrect) {
+                correctAnswers++;
+                correctAnswersElement.textContent = correctAnswers;
+            } 
+        }
+
+        function nextQuestion() {
+            questions.shift(); // Hapus pertanyaan pertama dari array
+            if (questions.length > 0) {
+                document.querySelector("p").textContent = questions[0].question;
+            } else {
+                document.querySelector("p").textContent = "Anda telah menjawab semua pertanyaan!";
+                checkAnswerButton.disabled = true;
+            }
+        }
+
+        // Memulai dengan pertanyaan pertama
+        document.querySelector("p").textContent = questions[0].question;
+    </script>
+</body>
+</html>
