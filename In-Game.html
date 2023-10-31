@@ -130,7 +130,7 @@
     
 
     <script>
-        const questions = [
+       const questions = [
             { question: "Apa itu EER?", answer: "Model" },
             { question: "Apa tujuan EER?", answer: "Pengembangan" },
             { question: "Apa yang ditingkatkan dalam EER dibandingkan dengan ER?", answer: "Ketepatan" },
@@ -187,11 +187,6 @@
             });
         }
 
-        function getRandomLetter() {
-            const alphabet = "QWERTYUIOPASDFGHJKLZXCVBNM";
-            return alphabet[Math.floor(Math.random() * alphabet.length)];
-        }
-
         setInterval(createFallingBox, 1000);
 
         // Tambahkan event listener untuk tombol "Periksa Jawaban"
@@ -199,21 +194,21 @@
         checkAnswerButton.addEventListener("click", checkAnswer);
 
         function checkAnswer() {
-            const userAnswer = answerBox.textContent.toUpperCase();
-            const correctAnswer = questions[0].answer.toUpperCase(); // Mengambil jawaban pertama dari pertanyaan
-            if (userAnswer === correctAnswer) {
-                notification.textContent = 'Jawaban Anda benar!';
-                markAnswer(true);
-            } else {
-                notification.textContent = 'Jawaban Anda salah';
-                markAnswer(false);
-            }
-            
-            // Setelah memeriksa jawaban, hapus isi kotak jawaban
-            answerBox.textContent = '';
-            // Munculkan pertanyaan baru
-            nextQuestion();
+        const userAnswer = answerBox.textContent.toUpperCase();
+        const correctAnswer = questions[0].answer.toUpperCase(); // Mengambil jawaban pertama dari pertanyaan
+        if (userAnswer === correctAnswer) {
+            notification.textContent = 'Jawaban Anda benar!';
+            markAnswer(true);
+        } else {
+            notification.textContent = 'Jawaban Anda salah';
+            markAnswer(false);
         }
+
+        // Setelah memeriksa jawaban, hapus isi kotak jawaban
+        answerBox.textContent = '';
+        // Munculkan pertanyaan baru
+        nextQuestion();
+    }
 
         // Tambahkan event listener untuk tombol "Hapus"
         clearAnswerButton.addEventListener("click", clearAnswer);
@@ -230,7 +225,8 @@
         }
 
         function nextQuestion() {
-            questions.shift(); // Hapus pertanyaan pertama dari array
+            const currentQuestion = questions.shift(); // Hapus pertanyaan pertama dari array
+            questions.push(currentQuestion); // Tambahkan kembali pertanyaan ke akhir array
             if (questions.length > 0) {
                 document.querySelector("p").textContent = questions[0].question;
             } else {
