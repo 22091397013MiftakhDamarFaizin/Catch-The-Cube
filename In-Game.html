@@ -89,7 +89,6 @@
             flex-direction: column;
             gap: 30px;
             text-align: center;
-            /* justify-content: space-between; */
         }
         #box-question p {
             display: flex;
@@ -101,7 +100,6 @@
     </style>
 </head>
 <body>
-    <!-- <h1>Catch Cubes</h1> -->
     
     
     <div id="score">Score: <span id="correctAnswers">0</span></span></div>
@@ -111,23 +109,22 @@
             <p>Apa itu EER?</p>
             <div id="answer-box">
                 <span id="answer"></span>
-            <!-- <button id="clearAnswerButton">Hapus</button> -->
             </div>
             
             <button id="checkAnswerButton">Periksa Jawaban</button>
             <div id="notification"></div>
         </div>
-        <div id="box-falling"></div>
-        
-            
-        </div>       
+        <div id="box-falling"></div>          
+        </div>
     </div>
-    
-   
-   
 
-    <!-- Tambahkan tombol "Periksa Jawaban" -->
+    <audio id="background-audio" autoplay loop>
+        <source src="assets/sound-bg.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
     
+
+
 
     <script>
        const questions = [
@@ -150,9 +147,14 @@
         const notification = document.getElementById("notification");
         const correctAnswersElement = document.getElementById("correctAnswers");
         const wrongAnswersElement = document.getElementById("wrongAnswers");
+        const backgroundAudio = document.getElementById("background-audio");
+
+        // Untuk memulai audio
+        backgroundAudio.play();
 
         let correctAnswers = 0;
         let wrongAnswers = 0;
+        let answeredQuestions = 0;
 
         function createFallingBox() {
             const fallingBox = document.createElement("div");
@@ -193,6 +195,7 @@
         const checkAnswerButton = document.getElementById("checkAnswerButton");
         checkAnswerButton.addEventListener("click", checkAnswer);
 
+
         function checkAnswer() {
         const userAnswer = answerBox.textContent.toUpperCase();
         const correctAnswer = questions[0].answer.toUpperCase(); // Mengambil jawaban pertama dari pertanyaan
@@ -208,13 +211,13 @@
         answerBox.textContent = '';
         // Munculkan pertanyaan baru
         nextQuestion();
-    }
 
-        // Tambahkan event listener untuk tombol "Hapus"
-        clearAnswerButton.addEventListener("click", clearAnswer);
+        answeredQuestions++;
 
-        function clearAnswer() {
-            answerBox.textContent = '';
+            if (answeredQuestions >= 10) {
+                // Jika jumlah pertanyaan yang telah dijawab mencapai 10, arahkan ke halaman "Score.html"
+                window.location.href = "Score.html?correctAnswers=" + correctAnswers;
+            }
         }
 
         function markAnswer(isCorrect) {
