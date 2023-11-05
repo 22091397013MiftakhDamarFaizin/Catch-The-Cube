@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Skor Akhir</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url(./assets/bg-In-Game.png);
+            background-size: cover;
+            padding-top: 100px;
+        }
+        #score-container {
+            margin: 0 auto;
+            padding: 20px;
+            background-size: cover;
+            width: 400px;
+        }
+        #final-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: aliceblue;
+        }
+        #play-again-button {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            color: navy;
+            background-color: cyan;
+            margin-top: 20px;
+            transition: all .3s;
+            font-weight: bold;
+        }
+        #play-again-button:hover {
+            background-color: navy;
+            color: cyan;
+        }
+    </style>
+</head>
+<body>
+    <div id="score-container">
+        <div id="final-score">Nilai Anda: <span id="correctAnswers">0</span>0</div>
+        <button id="play-again-button">Main Lagi</button>
+    </div>
+
+    <script>
+        // Ambil parameter correctAnswers dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const correctAnswers = urlParams.get("correctAnswers");
+
+        // Tampilkan skor akhir
+        const finalScoreElement = document.getElementById("correctAnswers");
+        finalScoreElement.textContent = correctAnswers;
+
+        // Tambahkan event listener untuk tombol "Main Lagi"
+        const playAgainButton = document.getElementById("play-again-button");
+        playAgainButton.addEventListener("click", () => {
+            // Redirect kembali ke halaman permainan
+            window.location.href = "Intro.html";
+        });
+    </script>
+</body>
+</html>
