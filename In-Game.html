@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Catch Cubes</title>
+    <title>Catch the Cubes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -120,7 +120,6 @@
 
     <audio id="background-audio" autoplay loop>
         <source src="assets/sound-bg.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
     </audio>
     
 
@@ -138,7 +137,6 @@
             { question: "Apa peran 'Subclass' dalam EER?", answer: "Spesialisasi" },
             { question: "Apa yang dimaksud dengan 'Aggregation' dalam EER?", answer: "Komposisi" },
             { question: "Apa yang dimaksud dengan 'Generalization' dalam EER?", answer: "Abstraksi" }
-            // Tambahkan pertanyaan dan jawaban di sini
         ];
 
         const gameContainer = document.getElementById("box-falling");
@@ -149,7 +147,6 @@
         const wrongAnswersElement = document.getElementById("wrongAnswers");
         const backgroundAudio = document.getElementById("background-audio");
 
-        // Untuk memulai audio
         backgroundAudio.play();
 
         let correctAnswers = 0;
@@ -161,20 +158,18 @@
             fallingBox.className = "falling-box";
             fallingBox.style.right = Math.random() * (gameContainer.offsetWidth - 50) + "px";
 
-            // Pilih secara acak salah satu objek pertanyaan
             const randomIndex = Math.floor(Math.random() * questions.length);
             fallingBox.textContent = questions[randomIndex].answer;
             
             gameContainer.appendChild(fallingBox);
 
-            const speed = Math.random() * (3 - 1) + 5; // Kecepatan jatuh acak
+            const speed = Math.random() * (3 - 1) + 5;
 
             const fallInterval = setInterval(() => {
                 const topPosition = fallingBox.offsetTop;
                 if (topPosition >= gameContainer.offsetHeight - 70) {
                     gameContainer.removeChild(fallingBox);
                     clearInterval(fallInterval);
-                    // Tandai jawaban sebagai salah jika kotak jatuh
                     markAnswer(false);
                 } else {
                     fallingBox.style.top = topPosition + speed + "px";
@@ -191,14 +186,13 @@
 
         setInterval(createFallingBox, 1000);
 
-        // Tambahkan event listener untuk tombol "Periksa Jawaban"
         const checkAnswerButton = document.getElementById("checkAnswerButton");
         checkAnswerButton.addEventListener("click", checkAnswer);
 
 
         function checkAnswer() {
         const userAnswer = answerBox.textContent.toUpperCase();
-        const correctAnswer = questions[0].answer.toUpperCase(); // Mengambil jawaban pertama dari pertanyaan
+        const correctAnswer = questions[0].answer.toUpperCase();
         if (userAnswer === correctAnswer) {
             notification.textContent = 'Jawaban Anda benar!';
             markAnswer(true);
@@ -207,15 +201,12 @@
             markAnswer(false);
         }
 
-        // Setelah memeriksa jawaban, hapus isi kotak jawaban
         answerBox.textContent = '';
-        // Munculkan pertanyaan baru
         nextQuestion();
 
         answeredQuestions++;
 
             if (answeredQuestions >= 10) {
-                // Jika jumlah pertanyaan yang telah dijawab mencapai 10, arahkan ke halaman "Score.html"
                 window.location.href = "Score.html?correctAnswers=" + correctAnswers;
             }
         }
@@ -228,8 +219,8 @@
         }
 
         function nextQuestion() {
-            const currentQuestion = questions.shift(); // Hapus pertanyaan pertama dari array
-            questions.push(currentQuestion); // Tambahkan kembali pertanyaan ke akhir array
+            const currentQuestion = questions.shift();
+            questions.push(currentQuestion);
             if (questions.length > 0) {
                 document.querySelector("p").textContent = questions[0].question;
             } else {
@@ -238,7 +229,6 @@
             }
         }
 
-        // Memulai dengan pertanyaan pertama
         document.querySelector("p").textContent = questions[0].question;
     </script>
 </body>
