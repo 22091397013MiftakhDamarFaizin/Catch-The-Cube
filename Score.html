@@ -50,23 +50,17 @@
     </audio>
 
     <script>
-        // Ambil parameter correctAnswers dari URL
         const urlParams = new URLSearchParams(window.location.search);
         const correctAnswers = urlParams.get("correctAnswers");
         const backgroundAudio = document.getElementById("background-audio");
 
-        // Untuk memulai audio
         backgroundAudio.play();
 
-
-        // Tampilkan skor akhir
         const finalScoreElement = document.getElementById("correctAnswers");
         finalScoreElement.textContent = correctAnswers;
 
-        // Tambahkan event listener untuk tombol "Main Lagi"
         const playAgainButton = document.getElementById("play-again-button");
         playAgainButton.addEventListener("click", () => {
-            // Redirect kembali ke halaman permainan
             window.location.href = "Intro.html";
         });
     </script>
