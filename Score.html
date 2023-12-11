@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Skor Akhir</title>
+    <title>Nilai 1</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,12 +18,14 @@
             width: 400px;
         }
         #final-score {
-            font-size: 24px;
+            font-size: 30px;
             font-weight: bold;
             color: aliceblue;
+            padding-top: 35%;
         }
-        #play-again-button {
+        button {
             padding: 10px;
+            width: 150px;
             border-radius: 8px;
             border: none;
             color: navy;
@@ -31,8 +33,9 @@
             margin-top: 20px;
             transition: all .3s;
             font-weight: bold;
+            font-size: 20px;
         }
-        #play-again-button:hover {
+        button:hover {
             background-color: navy;
             color: cyan;
         }
@@ -41,12 +44,11 @@
 <body>
     <div id="score-container">
         <div id="final-score">Nilai Anda: <span id="correctAnswers">0</span>0</div>
-        <button id="play-again-button">Main Lagi</button>
+        <a href="./Level-2.html"><button>Level 2</button></a>
     </div>
 
     <audio id="background-audio" autoplay loop>
         <source src="assets/skor.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
     </audio>
 
     <script>
@@ -58,11 +60,6 @@
 
         const finalScoreElement = document.getElementById("correctAnswers");
         finalScoreElement.textContent = correctAnswers;
-
-        const playAgainButton = document.getElementById("play-again-button");
-        playAgainButton.addEventListener("click", () => {
-            window.location.href = "Intro.html";
-        });
     </script>
 </body>
 </html>
