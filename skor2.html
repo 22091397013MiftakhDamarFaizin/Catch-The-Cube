@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nilai 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url(./assets/bg-In-Game.png);
+            background-size: cover;
+            padding-top: 100px;
+        }
+        #score-container {
+            margin: 0 auto;
+            padding: 20px;
+            background-size: cover;
+            width: 400px;
+        }
+        #final-score {
+            font-size: 30px;
+            font-weight: bold;
+            color: aliceblue;
+            padding-top: 35%;
+        }
+        button {
+            padding: 10px;
+            width: 150px;
+            border-radius: 8px;
+            border: none;
+            color: navy;
+            background-color: cyan;
+            margin-top: 20px;
+            transition: all .3s;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        button:hover {
+            background-color: navy;
+            color: cyan;
+        }
+    </style>
+</head>
+<body>
+    <div id="score-container">
+        <div id="final-score">Nilai Anda: <span id="correctAnswers">0</span>0</div>
+        <!-- <a href="./Intro.html"><button>Main Lagi</button></a> -->
+    </div>
+
+    <audio id="background-audio" autoplay loop>
+        <source src="assets/skor.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const correctAnswers = urlParams.get("correctAnswers");
+        const backgroundAudio = document.getElementById("background-audio");
+
+        backgroundAudio.play();
+
+        const finalScoreElement = document.getElementById("correctAnswers");
+        finalScoreElement.textContent = correctAnswers;
+    </script>
+</body>
+</html>

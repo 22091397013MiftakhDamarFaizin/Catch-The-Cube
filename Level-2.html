@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Level 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url(./assets/bg-In-Game.png);
+            background-size: cover;
+            padding-top: 100px;
+        }
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 400px;
+            padding: 20px;
+            margin: 0 auto;
+            border: none;
+            overflow: hidden;
+            background-image: url(./assets/bg-fallingbox.png);
+            background-size: cover;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 120px;
+        }
+        .falling-box {
+            position: absolute;
+            display: inline-flex;
+            flex-wrap: wrap;
+            padding: 8px;
+            border-radius: 8px;
+            background-color: navy;
+            color: cyan;
+            border: 1px solid #000;
+            text-align: center;
+            line-height: 40px;
+            font-size: 15px;
+        }
+        #answer-box {
+            display: inline-block;
+            width: 100px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+        }
+        #clear-answer-button {
+            display: inline-block;
+            vertical-align: top;
+        }
+        #notification {
+            margin: 20px auto;
+        }
+        #score {
+            margin-top: 5px;
+            font-weight: bold;
+            padding-bottom: 20px;
+            color: aliceblue;
+        }
+        #checkAnswerButton {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            color: aliceblue;
+            background-color: #000;
+            margin-top: 20px;
+            transition: all .3s;
+            font-weight: bold;
+        }
+        #checkAnswerButton:hover {
+            background-color: navy;
+            color: cyan;
+        }
+        #box-falling {
+            width: 400px;
+            height: 400px;
+            display: flex;
+            flex-wrap: wrap;
+            padding-right: 35px;
+        }
+        #box-question {
+            max-height: 320px;
+            width: 200px;
+            color: aliceblue;
+            padding-left: 40px;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            text-align: center;
+        }
+        #box-question p {
+            display: flex;
+            text-align: center;
+        }
+        #answer-box span {
+            padding-left: 50px;
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div id="score">Score: <span id="correctAnswers">0</span></span></div>
+
+    <div id="game-container">
+        <div id="box-question">
+            <p>Apa kegunaan 'Disjoint' dalam EER?</p>
+            <div id="answer-box">
+                <span id="answer"></span>
+            </div>
+            
+            <button id="checkAnswerButton">Periksa Jawaban</button>
+            <div id="notification"></div>
+        </div>
+        <div id="box-falling"></div>          
+        </div>
+    </div>
+
+    <audio id="background-audio" autoplay loop>
+        <source src="assets/sound-bg.mp3" type="audio/mpeg">
+    </audio>
+    
+
+
+
+    <script>
+        const questions = [
+            { question: "Apa kegunaan 'Disjoint' dalam EER?", answer: "Tidakberirisan" },
+            { question: "Apa perbedaan antara 'Total' dan 'Partial' dalam keanggotaan? (Membership)", answer: "Semua" },
+            { question: "Apa itu 'Role Indicator' dalam EER?", answer: "Peran" },
+            { question: "Apa arti 'Cardinality Ratio' dalam hubungan EER?", answer: "Rasio" },
+            { question: "Apa peran 'Specialization Hierarchy' dalam EER?", answer: "Struktur" },
+            { question: "Apa yang dimaksud dengan 'Complex Attribute' dalam EER?", answer: "Kompleks" },
+            { question: "Apa hubungan antara 'Covering' dan 'Overlapping' dalam EER?", answer: "TumpangTindih" },
+            { question: "Apa istilah untuk 'Key Attribute' dalam EER?", answer: "Kunci" },
+            { question: "Apa yang dimaksud dengan 'Attribute Inheritance' dalam EER?", answer: "Warisan" },
+            { question: "Apa peran 'Aggregation Hierarchy' dalam EER?", answer: "Hierarki" }
+        ];
+
+        const gameContainer = document.getElementById("box-falling");
+        const answerBox = document.getElementById("answer");
+        const clearAnswerButton = document.getElementById("clearAnswerButton");
+        const notification = document.getElementById("notification");
+        const correctAnswersElement = document.getElementById("correctAnswers");
+        const wrongAnswersElement = document.getElementById("wrongAnswers");
+        const backgroundAudio = document.getElementById("background-audio");
+
+        backgroundAudio.play();
+
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let answeredQuestions = 0;
+
+        function createFallingBox() {
+            const fallingBox = document.createElement("div");
+            fallingBox.className = "falling-box";
+            fallingBox.style.right = Math.random() * (gameContainer.offsetWidth - 50) + "px";
+
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            fallingBox.textContent = questions[randomIndex].answer;
+            
+            gameContainer.appendChild(fallingBox);
+
+            const speed = Math.random() * (3 - 1) + 5;
+
+            const fallInterval = setInterval(() => {
+                const topPosition = fallingBox.offsetTop;
+                if (topPosition >= gameContainer.offsetHeight - 70) {
+                    gameContainer.removeChild(fallingBox);
+                    clearInterval(fallInterval);
+                    markAnswer(false);
+                } else {
+                    fallingBox.style.top = topPosition + speed + "px";
+                }
+            }, 50);
+
+            fallingBox.addEventListener("click", () => {
+                const boxText = fallingBox.textContent;
+                answerBox.textContent += boxText;
+                gameContainer.removeChild(fallingBox);
+                clearInterval(fallInterval);
+            });
+        }
+
+        setInterval(createFallingBox, 1000);
+
+        const checkAnswerButton = document.getElementById("checkAnswerButton");
+        checkAnswerButton.addEventListener("click", checkAnswer);
+
+
+        function checkAnswer() {
+        const userAnswer = answerBox.textContent.toUpperCase();
+        const correctAnswer = questions[0].answer.toUpperCase();
+        if (userAnswer === correctAnswer) {
+            notification.textContent = 'Jawaban Anda benar!';
+            markAnswer(true);
+        } else {
+            notification.textContent = 'Jawaban Anda salah';
+            markAnswer(false);
+        }
+
+        answerBox.textContent = '';
+        nextQuestion();
+
+        answeredQuestions++;
+
+            if (answeredQuestions >= 10) {
+                window.location.href = "skor2.html?correctAnswers=" + correctAnswers;
+            }
+        }
+
+        function markAnswer(isCorrect) {
+            if (isCorrect) {
+                correctAnswers++;
+                correctAnswersElement.textContent = correctAnswers;
+            } 
+        }
+
+        function nextQuestion() {
+            const currentQuestion = questions.shift();
+            questions.push(currentQuestion);
+            if (questions.length > 0) {
+                document.querySelector("p").textContent = questions[0].question;
+            } else {
+                document.querySelector("p").textContent = "Anda telah menjawab semua pertanyaan!";
+                checkAnswerButton.disabled = true;
+            }
+        }
+
+        document.querySelector("p").textContent = questions[0].question;
+    </script>
+</body>
+</html>
